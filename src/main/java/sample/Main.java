@@ -8,36 +8,42 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacpp.opencv_objdetect;
+import org.bytedeco.javacv.*;
 
-import static org.bytedeco.javacpp.opencv_core.cvLoad;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+
+import static org.bytedeco.javacpp.opencv_core.*;
+import static org.bytedeco.javacpp.opencv_highgui.*;
 import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
-
+import static org.bytedeco.javacpp.opencv_imgproc.CV_AA;
+import static org.bytedeco.javacpp.opencv_imgproc.cvRectangle;
+import static org.bytedeco.javacpp.opencv_objdetect.*;
 
 public class Main extends Application {
-
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("sample.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+
+        Parent root = null;
+        try {
+            root = FXMLLoader.load(getClass().getResource("/WebCamPreview.fxml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Scene scene = new Scene(root, 900, 690);
+
+        primaryStage.setTitle("ASK Projekt");
+        primaryStage.setScene(scene);
+        primaryStage.centerOnScreen();
         primaryStage.show();
-
-        Image image = new Image("lena.jpg");
-        System.out.println(image.getHeight());
-
-        String XML_FILE = "haarcascade_frontalface_default.xml";
-        opencv_objdetect.CvHaarClassifierCascade cascade = new opencv_objdetect.CvHaarClassifierCascade(cvLoad(XML_FILE));
-        System.out.println(cascade.isNull()); // bedzie true
-
-        opencv_core.IplImage img = cvLoadImage("lena.jpg");
-        System.out.println(img.isNull()); // bedzie true
-        //System.out.println(img.height()); // wywali NullPointerException
     }
 
-
     public static void main(String[] args) {
-
         launch(args);
-
     }
 }
